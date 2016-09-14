@@ -24,10 +24,7 @@ namespace CSHttpClientSample
             int cnt = 0; // костыль, потому что иначе вылетает exception
             foreach (var cur in FindUrls())
             {
-                if (cnt > 10)
-                    break;
                 RunEmotion(cur.contentUrl);
-                cnt++;
             }
             File.WriteAllText(@"result.json", JsonConvert.SerializeObject(dic));
             Console.WriteLine("End...");
@@ -37,7 +34,7 @@ namespace CSHttpClientSample
         internal static dynamic FindUrls()
         {
             var baseurl = @"https://api.cognitive.microsoft.com/bing/v5.0/images/search";
-            var task = baseurl.SetQueryParam("q", "people laugh")
+            var task = baseurl.SetQueryParams(new { q = "people laugh", count = 10 })
                 .WithHeader("Ocp-Apim-Subscription-Key", "4d73a2cc3b1448fba22e0db6efa3ed4b")
                 .GetJsonAsync();
             task.Wait();
